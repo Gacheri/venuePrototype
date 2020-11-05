@@ -35,9 +35,14 @@ class Listingimage extends \yii\db\ActiveRecord
             [['listingId'], 'exist', 'skipOnError' => true, 'targetClass' => Listing::className(), 'targetAttribute' => ['listingId' => 'listingId']],
             [['image'], 'file'],
             [['image'], 'safe'],
-        
+
         ];
     }
+
+    public function getVideoLink()
+      {
+        return Yii::$app->params['frontendUrl'] . 'uploads/' . $this->listingIdid .;
+      }
 
     /**
      * {@inheritdoc}

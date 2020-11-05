@@ -42,16 +42,10 @@ class ListingController extends Controller
         $searchModel = new ListingSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-        $countQuery = clone $query;
-        $pages = new Pagination(['totalCount' => $countQuery->count()]);
-        $models = $query->offset($pages->offset)
-        ->limit($pages->limit)
-        ->all();
-
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-            'pages' => $pages,
+            // 'pages' => $pages,
         ]);
     }
 
@@ -128,7 +122,6 @@ class ListingController extends Controller
         ]);
 
     }
-
 
     /**
      * Updates an existing Listing model.

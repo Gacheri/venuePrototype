@@ -5,6 +5,7 @@ use yii\helpers\Html;
 use frontend\models\Location;
 use frontend\models\Listing;
 use yii\data\Pagination;
+use yii\data\ActiveDataProvider;
 
 /* @var $this yii\web\View */
 
@@ -12,8 +13,8 @@ $this->title = 'Venues';
 
 $markers = Location::find()->innerJoinWith('listing')->asArray()->all();
 
-$listings = Listing::find()->all();
-$pagination = new Pagination(['totalCount' => count($listings), 'pageSize'=>4]);
+$listings = Listing::find()->limit(6)->all();
+$pagination = new Pagination(['totalCount' => count($listings), 'pageSize'=>30]);
 
 ?>
 
@@ -38,7 +39,7 @@ $pagination = new Pagination(['totalCount' => count($listings), 'pageSize'=>4]);
     <?php foreach($listings as $listing){?>
        <div class="col-md-6">
           <div class="card" style="width: 18rem;">
-            <img src="..." class="card-img-top" alt="...">
+            <img src=""> class="card-img-top" alt="...">
             <div class="card-body">
               <h3 class="card-title"><?= $listing->listingName?></h3>
               <p class="card-text"><?= $listing->listingDesc?></p>
@@ -47,10 +48,6 @@ $pagination = new Pagination(['totalCount' => count($listings), 'pageSize'=>4]);
           </div>
        </div>
      <?php }?>
-
-     <?php \yii\widgets\LinkPager::widget([
-    'pagination' => $pagination,
-]); ?>
 
     </div>
   </div>
