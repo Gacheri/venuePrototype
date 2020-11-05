@@ -4,11 +4,13 @@ namespace frontend\controllers;
 
 use Yii;
 use frontend\models\Listing;
+use frontend\models\Listingimage;
 use frontend\models\ListingSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use frontend\models\Location;
+use yii\web\UploadedFile;
 use yii\data\Pagination;
 
 /**
@@ -76,7 +78,7 @@ class ListingController extends Controller
         $model = new Listing();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['addlocation', 'listingId' => $model->listingId]);
+            return $this->redirect(['addlocation', 'addimage', 'listingId' => $model->listingId]);
         }
 
         return $this->render('create', [
@@ -89,13 +91,42 @@ class ListingController extends Controller
         $model = new Location();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['index']);
+            return $this->redirect(['addimage', 'listingId' => $model->listingId]);
         }
 
         return $this->render('addlocation', [
             'model' => $model,
             'listingId'=>$listingId
         ]);
+    }
+
+
+    public function actionAddimage($listingId)
+    {
+        $model = new Listingimage();
+
+        if ($model->load(Yii::$app->request->post()))
+        {
+           //generates images with unique names
+        $imageName = bin2hex(openssl_random_pseudo_bytes(10));
+        $model->image = UploadedFile::getInstance($model, 'image');
+
+        //saves file in the root directory
+         $model->image->saveAs('uploads/'.$imageName.'.'.$model->image->extension);
+
+            //save in the db
+         $model->image ='uploads/'.$imageName.'.'.$model->image->extension;
+
+
+         return $this->redirect(['index']);
+        }
+
+
+        return $this->render('addimage', [
+            'model' => $model,
+            'listingId' => $listingId,
+        ]);
+
     }
 
 
