@@ -1,12 +1,51 @@
       /* Set the size of the div element that contains the map */
       #homemap {
-        height: 800px;
+        height: 600px;
         /* The height is 400 pixels */
         width: 100%;
         /* The width is the width of the web page */
       }
-    
-    /*home page fab*/  
+
+      .search-box {
+          position: relative;
+      }
+      .search-box .glyphicon {
+          position: absolute;
+          padding: 10px;
+          pointer-events: none;
+          left: 15px;
+          top: 0px;
+      }
+      .search-box .glyphicon:before {
+          color: white;
+          transition: all 0.2s linear;
+      }
+      .search-box input {
+          color: #fff;
+          padding-left: 60px;
+          background: #546e7a;
+          border:0;
+          outline: none !important;
+          transition: all 0.2s linear;
+      }
+      .search-box input:focus {
+          background: #fff !important;
+          outline: 0;
+          color: #333;
+      }
+      .search-box input:focus + .glyphicon:before {
+          color: #333;
+      }
+      .search-box input:hover {
+          background: #78909c;
+      }
+
+
+
+
+
+
+    /*home page fab*/
       .btn-group-fab {
 		  position: fixed;
 		  width: 50px;
@@ -76,8 +115,8 @@
     #searchInput:focus {
       border-color: #4d90fe;
     }
-      
-      .progress {    
+
+      .progress {
     position: relative;
     height: 25px;
 }

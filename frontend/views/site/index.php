@@ -3,17 +3,59 @@
 use yii\helpers\Url;
 use yii\helpers\Html;
 use frontend\models\Location;
+use frontend\models\Listing;
+use yii\data\Pagination;
 
 /* @var $this yii\web\View */
 
-$this->title = 'Work Flow & Map';
+$this->title = 'Venues';
 
 $markers = Location::find()->innerJoinWith('listing')->asArray()->all();
+
+$listings = Listing::find()->all();
+$pagination = new Pagination(['totalCount' => count($listings), 'pageSize'=>4]);
+
 ?>
 
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBmnULnIcTW4J_9NxGeHhLSVLme6Ba36AE&callback=initMap&libraries=&v=weekly" defer></script>
 
-<div id="homemap"></div>
+
+<div class="search-box">
+    <input placeholder="Search..." type="text" class="form-control" />
+    <i class="glyphicon glyphicon-search"></i>
+</div>
+
+<br>
+<br>
+
+<div class="row">
+  <div class="col-md-8">
+    <div id="homemap"></div>
+  </div>
+
+  <div class="col-md-4">
+    <div class="row">
+    <?php foreach($listings as $listing){?>
+       <div class="col-md-6">
+          <div class="card" style="width: 18rem;">
+            <img src="..." class="card-img-top" alt="...">
+            <div class="card-body">
+              <h3 class="card-title"><?= $listing->listingName?></h3>
+              <p class="card-text"><?= $listing->listingDesc?></p>
+              <a href="#" class="btn btn-danger">Book Now</a>
+            </div>
+          </div>
+       </div>
+     <?php }?>
+
+     <?php \yii\widgets\LinkPager::widget([
+    'pagination' => $pagination,
+]); ?>
+
+    </div>
+  </div>
+
+</div>
 
 <div class="btn-group-fab" role="group" aria-label="FAB Menu">
   <div>
@@ -33,15 +75,15 @@ $markers = Location::find()->innerJoinWith('listing')->asArray()->all();
           zoom: 7,
           center: nairobi,
         });
-        
-        
-        
+
+
+
         // Put a marker foreach listing
         var markers = <?php echo json_encode($markers)?>;
         markers.forEach(putMarkers);
-       
+
         function putMarkers(item) {
-        
+
             const contentString =
                 '<div id="content">' +
                 '<div id="siteNotice">' +
@@ -54,14 +96,14 @@ $markers = Location::find()->innerJoinWith('listing')->asArray()->all();
                 "(Date Posted: "+item.listing.createdAt+").</p>" +
                 "</div>" +
                 "</div>";
-            
+
               const infowindow = new google.maps.InfoWindow({
                 content: contentString,
               });
-        
-        
-        
-        
+
+
+
+
         console.log(item);
              var  lat = parseFloat(item.lattitude);
              var  lng = parseFloat(item.longitude);
@@ -70,7 +112,7 @@ $markers = Location::find()->innerJoinWith('listing')->asArray()->all();
               map: map,
               title: item.listing.listingName+" ("+item.city+")",
             });
-            
+
           marker.addListener("click", () => {
             infowindow.open(map, marker);
           });

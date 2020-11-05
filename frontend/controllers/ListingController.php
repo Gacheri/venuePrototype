@@ -9,6 +9,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use frontend\models\Location;
+use yii\data\Pagination;
 
 /**
  * ListingController implements the CRUD actions for Listing model.
@@ -39,9 +40,16 @@ class ListingController extends Controller
         $searchModel = new ListingSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
+        $countQuery = clone $query;
+        $pages = new Pagination(['totalCount' => $countQuery->count()]);
+        $models = $query->offset($pages->offset)
+        ->limit($pages->limit)
+        ->all();
+
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'pages' => $pages,
         ]);
     }
 
@@ -75,21 +83,21 @@ class ListingController extends Controller
             'model' => $model,
         ]);
     }
-    
+
     public function actionAddlocation($listingId)
     {
         $model = new Location();
-        
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['index']);
         }
-        
+
         return $this->render('addlocation', [
             'model' => $model,
             'listingId'=>$listingId
         ]);
     }
-    
+
 
     /**
      * Updates an existing Listing model.
