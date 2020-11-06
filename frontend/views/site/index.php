@@ -39,7 +39,7 @@ $pagination = new Pagination(['totalCount' => count($listings), 'pageSize'=>30])
     <?php foreach($listings as $listing){?>
        <div class="col-md-6">
           <div class="card" style="width: 18rem;">
-            <img src=""> class="card-img-top" alt="...">
+            <img src="<?= Yii::$app->request->baseUrl ?>/uploads/" class="card-img-top" alt="Venue">
             <div class="card-body">
               <h3 class="card-title"><?= $listing->listingName?></h3>
               <p class="card-text"><?= $listing->listingDesc?></p>

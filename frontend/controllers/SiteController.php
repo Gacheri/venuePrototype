@@ -215,7 +215,7 @@ class SiteController extends Controller
         ]);
     }
 
-    /**
+    /** <?= \Yii::$app->request->baseUrl.'/'.$listing['image']?>
      * Verify email address
      *
      * @param string $token
